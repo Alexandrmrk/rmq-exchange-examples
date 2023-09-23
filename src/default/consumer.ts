@@ -1,12 +1,10 @@
 import * as amqp from 'amqplib';
 import { RMQ_URL } from '../common/constants';
-
-const QUEUE_NAME = 'default';
+import { QUEUE_NAME } from './constants';
 
 (async () => {
-  const connection = await amqp.connect(RMQ_URL);
-
   try {
+    const connection = await amqp.connect(RMQ_URL);
     const channel = await connection.createChannel();
 
     channel.assertQueue(QUEUE_NAME, { durable: false });
@@ -15,7 +13,7 @@ const QUEUE_NAME = 'default';
       QUEUE_NAME,
       msg => {
         if (msg) {
-          console.log(`[${new Date().toLocaleTimeString()}] Received: [%s]`, msg.content.toString());
+          console.log(`[${new Date().toLocaleTimeString()}] Received: %s`, msg.content.toString());
         }
       },
       {

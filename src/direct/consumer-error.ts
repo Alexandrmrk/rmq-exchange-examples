@@ -1,20 +1,22 @@
 import * as amqp from 'amqplib';
 import { RMQ_URL } from '../common/constants';
+import { EXCHANGE_NAME } from './constants';
 
-const ExchangeName = 'direct-log';
-const QueueName = 'error-q';
+const QUEUE_NAME = 'error-q';
+
 (async () => {
   const connection = await amqp.connect(RMQ_URL);
 
   try {
     const channel = await connection.createChannel();
 
-    channel.assertExchange(ExchangeName, 'direct');
-    channel.assertQueue(QueueName, { durable: false });
-    channel.bindQueue(QueueName, ExchangeName, 'error');
+    channel.assertExchange(EXCHANGE_NAME, 'direct');
+    channel.assertQueue(QUEUE_NAME, { durable: false });
+
+    channel.bindQueue(QUEUE_NAME, EXCHANGE_NAME, 'error');
 
     channel.consume(
-      QueueName,
+      QUEUE_NAME,
       msg => {
         if (msg) {
           console.log(`[${new Date().toLocaleTimeString()}] Received: [%s]`, msg.content.toString());

@@ -2,14 +2,15 @@ import amqp from 'amqplib';
 import { random } from '../common/random';
 import { RMQ_URL } from '../common/constants';
 import { setTimeout } from 'timers/promises';
-
-const ExchangeName = 'direct-log';
+import { EXCHANGE_NAME } from './constants';
 
 (async () => {
-  const connection = await amqp.connect(RMQ_URL);
   try {
+    const connection = await amqp.connect(RMQ_URL);
     const channel = await connection.createChannel();
-    channel.assertExchange(ExchangeName, 'direct');
+
+    channel.assertExchange(EXCHANGE_NAME, 'direct');
+
     const levels = ['error', 'warning', 'info'];
 
     do {
@@ -20,12 +21,10 @@ const ExchangeName = 'direct-log';
       const routingKey = levels[index];
       const msg = `Message type ${routingKey} is sent direct exchange`;
 
-      channel.publish(ExchangeName, routingKey, Buffer.from(msg));
+      channel.publish(EXCHANGE_NAME, routingKey, Buffer.from(msg));
       console.log(`[${new Date().toLocaleTimeString()}]  ${msg}`);
     } while (true);
   } catch (error) {
     console.log(`error: (${error})`);
-  } finally {
-    await connection.close();
   }
 })();
