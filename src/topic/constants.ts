@@ -1,1 +1,2 @@
-export const EXCHANGE_NAME = 'topic-cars';
+export const EXCHANGE_NAME = 'topic';
+export const EXCHANGE_TYPE = 'topic';

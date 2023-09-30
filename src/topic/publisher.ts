@@ -2,14 +2,14 @@ import amqp from 'amqplib';
 import { random } from '../common/random';
 import { RMQ_URL } from '../common/constants';
 import { setTimeout } from 'timers/promises';
-import { EXCHANGE_NAME } from './constants';
+import { EXCHANGE_NAME, EXCHANGE_TYPE } from './constants';
 
 (async () => {
   try {
     const connection = await amqp.connect(RMQ_URL);
     const channel = await connection.createChannel();
 
-    channel.assertExchange(EXCHANGE_NAME, 'topic');
+    channel.assertExchange(EXCHANGE_NAME, EXCHANGE_TYPE);
 
     let counter = 0;
     do {

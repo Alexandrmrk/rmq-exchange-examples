@@ -1,6 +1,6 @@
 import * as amqp from 'amqplib';
 import { RMQ_URL } from '../common/constants';
-import { EXCHANGE_NAME } from './constants';
+import { EXCHANGE_NAME, EXCHANGE_TYPE } from './constants';
 
 const QUEUE_NAME = 'tesla-q';
 
@@ -9,7 +9,7 @@ const QUEUE_NAME = 'tesla-q';
     const connection = await amqp.connect(RMQ_URL);
     const channel = await connection.createChannel();
 
-    channel.assertExchange(EXCHANGE_NAME, 'topic');
+    channel.assertExchange(EXCHANGE_NAME, EXCHANGE_TYPE);
     channel.assertQueue(QUEUE_NAME, { durable: false });
 
     channel.bindQueue(QUEUE_NAME, EXCHANGE_NAME, 'Tesla.#');

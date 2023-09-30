@@ -11,18 +11,20 @@ import { EXCHANGE_NAME, EXCHANGE_TYPE } from './constants';
 
     channel.assertExchange(EXCHANGE_NAME, EXCHANGE_TYPE);
 
-    const levels = ['error', 'warning', 'info'];
-
+    let counter = 0;
     do {
       const delay = random(1000, 3000);
-      const index = random(0, levels.length - 1);
-
       await setTimeout(delay);
-      const routingKey = levels[index];
-      const msg = `Message type ${routingKey} is sent direct exchange`;
+      const monies = random(1000, 10_000).toString();
 
-      channel.publish(EXCHANGE_NAME, routingKey, Buffer.from(msg));
-      console.log(`[${new Date().toLocaleTimeString()}]  ${msg}`);
+      const msg = `Payment received for the amount of ${monies}`;
+
+      channel.publish(EXCHANGE_NAME, '', Buffer.from(msg));
+      console.log(
+        `[${new Date().toLocaleTimeString()}]  Payment received for amount of $${monies}. Notifying by '${EXCHANGE_NAME}' Exchange`,
+      );
+
+      counter++;
     } while (true);
   } catch (error) {
     console.log(`error: (${error})`);

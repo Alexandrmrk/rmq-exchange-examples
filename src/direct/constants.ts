@@ -1,1 +1,2 @@
-export const EXCHANGE_NAME = 'direct-log';
+export const EXCHANGE_NAME = 'direct';
+export const EXCHANGE_TYPE = 'direct';
